@@ -6,9 +6,7 @@ class Window(QtWidgets.QMainWindow):
     def close_application(self):
 
         # popup warning
-        choice = QtWidgets.QMessageBox.question(self, 'Extract!',
-                                            "Get into the chopper?",
-                                            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        choice = QtWidgets.QMessageBox.question(self, 'Extract!', "Get into the chopper?", QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         if choice == QtWidgets.QMessageBox.Yes:
             print("Extracting Naaaaaaoooww!!!!")
             sys.exit()
@@ -38,11 +36,37 @@ class Window(QtWidgets.QMainWindow):
 
         # progress bar display
 
+        self.progress = QtWidgets.QProgressBar(self)
+        self.progress.setGeometry(200, 80, 250, 20)
+
         self.btn = QtWidgets.QPushButton('Download', self)
         self.btn.move(200, 120)
         self.btn.clicked.connect(self.download)
 
+        # Combo-box (dropdown) display
+
+        print(self.style().objectName())
+        self.styleChoice = QtWidgets.QLabel("Windows Vista", self)
+
+        comboBox = QtWidgets.QComboBox(self)
+        comboBox.addItem("motif")
+        comboBox.addItem("Windows")
+        comboBox.addItem("cde")
+        comboBox.addItem("Plastique")
+        comboBox.addItem("Cleanlooks")
+        comboBox.addItem("windowsvista")
+        comboBox.move(50, 250)
+
+        self.styleChoice.move(50, 150)
+        comboBox.activated[str].connect(self.style_choice)
+
         self.show()
+
+    # Combo-box (dropdown) definition
+
+    def style_choice(self, text):
+        self.styleChoice.setText(text)
+        QtWidgets.QApplication.setStyle(QtWidgets.QStyleFactory.create(text))
 
     # random progress bar definition
 
@@ -88,6 +112,7 @@ class Window(QtWidgets.QMainWindow):
         fileMenu.addAction(extractAction)
 
         self.home()
+
 
 def run():
     app = QtWidgets.QApplication(sys.argv)
